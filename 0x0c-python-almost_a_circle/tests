@@ -1,5 +1,4 @@
-import unittest
-import calc
+>>>>>>> origin/main
 
 class TestCalc(unittest.TestCase):
 
