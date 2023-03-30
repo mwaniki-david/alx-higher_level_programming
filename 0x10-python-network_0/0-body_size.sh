@@ -1,20 +1,13 @@
-#!/usr/bin/python3
-"""
-This script takes in a URL, sends a request to that URL using requests, and
-displays the size of the body of the response in bytes.
-"""
+#!/bin/bash
 
-import sys
-import requests
+url="$1"
+response=$(curl -s -w '\n%{size_download}' "$url")
+size=$(echo "$response" | tail -n 1)
 
-if len(sys.argv) != 2:
-       	print("Usage: {} <URL>".format(sys.argv[0]))
-       	sys.exit(1)
-
-response = requests.get(sys.argv[1])
-if response.status_code == 200:
-        print(len(response.content))
-else:
-       	print("Error: HTTP status code {}".format(response.status_code))
-sys.exit(1)
+if [[ $size =~ ^[0-9]+$ ]]; then
+	  echo "Size of $url: $size bytes"
+  else
+	    echo "Error: Failed to retrieve the size of $url"
+	      exit 1
+fi
 

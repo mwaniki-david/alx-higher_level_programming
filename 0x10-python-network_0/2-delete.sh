@@ -1,15 +1,13 @@
-#!/usr/bin/python3
-"""
-Sends a DELETE request to the URL passed as the first argument and displays the body of the response
-"""
-import requests
-import sys
+#!/bin/bash
 
-if __name__ == "__main__":
-	if len(sys.argv) != 2:
-		print("Usage: {} URL".format(sys.argv[0]))
-		sys.exit(1)
-		url = sys.argv[1]
-		response = requests.delete(url)
-		print(response.text)
+url="$1"
+response=$(curl -s -w '%{http_code}' -X DELETE "$url")
+
+if [ ${response: -3} -eq 200 ]; then
+	  body=$(curl -s -X DELETE "$url")
+	    echo "$body"
+    else
+	      echo "Error: Request failed with status code ${response: -3}"
+	        exit 1
+fi
 
